@@ -1,0 +1,76 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+__global__ void matrixMul(int* C,int* A,int* B,int n)
+{
+int row = threadIdx.x;
+int col = threadIdx.y;
+int value = 0;
+for(int i = 0; i < n; ++i)
+{
+value  +=  A[row * n + i] * B[i * n + col];
+}
+C[row * n + col] = value;
+}
+
+int main()
+{
+  int n = 5;
+  int size = n*n;
+  int mem_size =sizeof(int) * size;
+  int* h_A = (int*)malloc(mem_size);
+  int* h_B = (int*)malloc(mem_size);
+
+  for(int i=0;i<size;i++){
+      h_A[i] = i*i+8;
+      h_B[i] = i*i*i;
+  }
+ 
+  printf("\nMatrix A\n");
+  for(int i = 0; i < size; i++)
+  {
+    printf("%d ", h_A[i]);
+    if(((i + 1) % n) == 0)
+    printf("\n");
+  }
+  printf("\nMatrix B\n");
+  for(int i = 0; i < size; i++)
+  {
+    printf("%d ", h_B[i]);
+    if(((i + 1) % n) == 0)
+    printf("\n");
+  }
+
+  int* h_C = (int *)malloc(mem_size);
+
+  int* d_A;
+  int* d_B;
+  int* d_C;
+  cudaMalloc(&d_A, mem_size);
+  cudaMalloc(&d_B, mem_size);
+  cudaMalloc(&d_C, mem_size);
+  cudaMemcpy(d_A, h_A,mem_size ,cudaMemcpyHostToDevice);
+  cudaMemcpy(d_B, h_B,mem_size ,cudaMemcpyHostToDevice);
+
+  dim3  threads(n, n);
+  dim3  grid(1, 1);
+  matrixMul<<<grid ,threads>>>(d_C, d_A,d_B, n);
+
+  cudaMemcpy(h_C, d_C, mem_size ,cudaMemcpyDeviceToHost);
+
+  printf("\nMatrix C\n ");
+  for(int i = 0;i<size; i ++){
+	  printf("%d ",h_C[i]);
+	  if(((i+ 1) % n) == 0)
+		printf("\n");
+  }
+  printf("\n");
+
+  cudaFree(d_A);
+  cudaFree(d_B);
+  cudaFree(d_C);
+  free(h_A);
+  free(h_B);
+  free(h_C);
+  return 0;
+}

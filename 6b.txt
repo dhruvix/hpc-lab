@@ -1,0 +1,44 @@
+#include<stdio.h>
+#include<stdlib.h>
+ 
+__global__ void vectAdd(int *a, int *b, int *c, int n){
+    int i = blockIdx.x*blockDim.x + threadIdx.x;
+    if(i < n){
+        c[i] = a[i] + b[i];
+    }
+}
+ 
+int main(){
+  int *ha, *hb, *hc, *da, *db, *dc;
+  int i;
+  ha = (int *)malloc(5*sizeof(int));
+  hb = (int *)malloc(5*sizeof(int));
+  hc = (int *)malloc(5*sizeof(int));
+  cudaMalloc(&da, 5*sizeof(int));
+  cudaMalloc(&db, 5*sizeof(int));
+  cudaMalloc(&dc, 5*sizeof(int));
+ 
+  for(i=0;i<5;i++){
+      ha[i] = i*i+8;
+      hb[i] = i*i*i;
+  }
+ 
+  cudaMemcpy(da, ha, 5*sizeof(int), cudaMemcpyHostToDevice);
+  cudaMemcpy(db, hb, 5*sizeof(int), cudaMemcpyHostToDevice);
+ 
+  vectAdd<<<2,3>>>(da,db,dc,5);
+ 
+  cudaMemcpy(hc, dc, 5*sizeof(int), cudaMemcpyDeviceToHost);
+ 
+  for(i=0;i<5;i++){
+      printf("%d + %d = %d\n",ha[i],hb[i],hc[i]);
+  }
+ 
+  cudaFree(da);
+  cudaFree(db);
+  cudaFree(dc);
+  free(ha);
+  free(hb);
+  free(hc);
+  return 0;
+}

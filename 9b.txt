@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+__global__ void hello()
+{
+  printf("Hello world! I'm thread %d of block %d\n", threadIdx.x, blockIdx.x);
+}
+
+int main()
+{
+  int b = 5;
+  int t = 2;
+  hello<<<b, t>>>();
+  cudaDeviceSynchronize();
+  printf("The above message has been printed %d times. (%d * %d = %d)",b*t,b,t,b*t);
+  return 0;
+}
