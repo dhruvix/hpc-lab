@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <mpi.h>
+#include <string.h>
+#define BUFFER_SIZE 32
+int main(int argc,char *argv[])
+{
+	int  MyRank,Numprocs;
+	int  tag = 0;
+	int  temp;
+	char Message[BUFFER_SIZE];
+	MPI_Init(&argc,&argv);
+	MPI_Status status;
+	MPI_Comm_rank(MPI_COMM_WORLD,&MyRank);
+	MPI_Comm_size(MPI_COMM_WORLD,&Numprocs);
+
+	if(MyRank == 3){
+		strcpy(Message, "Mallegowda sir"); 
+		printf("\nThe message being sent from %d is: %s \n",MyRank,Message);
+		for (temp=0; temp<Numprocs&&temp!=3;temp++)
+		{
+		MPI_Send(Message, BUFFER_SIZE, MPI_CHAR, temp, tag,MPI_COMM_WORLD);
+		}
+	}
+ 	else {          
+
+	MPI_Recv(Message, BUFFER_SIZE, MPI_CHAR, 3, tag,MPI_COMM_WORLD, &status);
+
+	printf("\n%s received by process %d \n", Message,MyRank);
+  	}
+
+  	MPI_Finalize();
+}
