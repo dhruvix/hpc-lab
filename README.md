@@ -37,7 +37,7 @@ To compile and run MPI programs:
 ```
 mpicc a.c
 mpirun -np 4 ./a.out
-//4 = number of processors
+//4 = number of processes
 ```
 To compile and run CUDA C programs:
 ```
