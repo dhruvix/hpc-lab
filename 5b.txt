@@ -8,7 +8,7 @@ int main (int argc, char *argv[])
 
    MPI_Init (&argc, &argv);
    MPI_Comm_rank (MPI_COMM_WORLD, &rank);
-   MPI_Scatter ((void *)data, 2, MPI_INT, (void *)i  , 2, MPI_INT, 0, MPI_COMM_WORLD);
+   MPI_Scatter ((void *)data, 2, MPI_INT, (void *)i, 2, MPI_INT, 0, MPI_COMM_WORLD);
 
    printf ("Process %d Received [%d, %d]\n", rank, i[0],i[1]);
    MPI_Finalize();   
