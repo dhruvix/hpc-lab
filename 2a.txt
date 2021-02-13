@@ -1,0 +1,41 @@
+#include<stdio.h>
+#include<omp.h>
+
+int main(){
+int a[]={1,2,3,4,5,6,7,8,9,10},b[]={10,9,8,7,6,5,4,3,2,1},c[10],d[10];
+int i;
+
+#pragma omp parallel default(shared) private(i)
+{
+
+#pragma omp sections nowait
+{
+#pragma omp section
+{
+for(i=0;i<10;i++)
+	c[i]=a[i]+b[i];
+printf("Section 1 executed\n");
+}
+
+#pragma omp section
+{
+for(i=0;i<10;i++)
+	d[i]=a[i]-b[i];
+printf("Section 2 executed\n");
+}
+}
+
+}
+
+printf("Array C: ");
+for(i=0;i<10;i++)
+	printf("%d\t",c[i]);
+printf("\n");
+
+printf("Array D: ");
+for(i=0;i<10;i++)
+	printf("%d\t",d[i]); 
+printf("\n");
+
+return 0;
+}

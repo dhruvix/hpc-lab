@@ -1,0 +1,15 @@
+#include<omp.h>
+#include<stdio.h>
+int main()
+{
+        int i,n;
+        int fac=1;
+	printf("Enter the value of n: ");
+	scanf("%d",&n);
+#pragma omp parallel for firstprivate(n) reduction(*:fac)
+        for(i=1;i<=n;i++){
+                fac=fac*i;
+                printf("thread no:%d\n",omp_get_thread_num());
+        }
+        printf("fac(%d)=%d\n",n,fac);
+}

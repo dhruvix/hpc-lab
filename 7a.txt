@@ -1,0 +1,27 @@
+#include <omp.h>
+#include<stdio.h>
+
+int b, i, x, tid;
+#pragma omp threadprivate(x)
+
+int main() 
+{
+
+printf("1st Parallel Region:\n");
+#pragma omp parallel private(b,tid)
+{
+tid = omp_get_thread_num();
+b = tid*10;
+x = tid*100;
+printf("Thread %d: b = %d, x= %d\n",tid,b,x);
+}
+
+printf("2nd Parallel Region:\n");
+#pragma omp parallel private(tid)
+{
+tid = omp_get_thread_num();
+printf("Thread %d: b = %d, x= %d\n",tid,b,x);
+}
+
+return(0);
+}

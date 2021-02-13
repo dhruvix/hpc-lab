@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <omp.h>
+#include<stdlib.h>
+
+int main()
+{
+int maxim=0,i,arr[1000];
+for(i=0;i<1000;i++)
+	arr[i]=i;
+
+#pragma omp parallel for
+for(i=0;i<1000;i++)
+{
+if(arr[i]>maxim)
+{
+#pragma omp critical
+ if(arr[i]>maxim)
+ 	maxim=arr[i];
+}
+}
+
+printf("maximum element:%d\n",maxim);
+return(0);
+}

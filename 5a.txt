@@ -1,0 +1,22 @@
+#include<omp.h>
+#include<stdio.h>
+
+int main(){
+        int i;
+#pragma omp parallel
+{
+	omp_set_num_threads(4);
+        printf("This is thread %d\n",omp_get_thread_num());
+        i=omp_get_thread_num();
+        if(i==0)
+        {
+        printf("No. of threads: %d\n",omp_get_num_threads());
+        printf("No. of processes: %d\n",omp_get_num_procs());
+        printf("Maximum no. of threads: %d\n",omp_get_max_threads());
+	printf("0 = No, 1 = Yes \n");
+        printf("Parallel? %d\n",omp_in_parallel());
+        printf("Dynamic? %d\n",omp_get_dynamic());
+        printf("Nested? %d\n",omp_get_nested());
+        }
+}
+}
