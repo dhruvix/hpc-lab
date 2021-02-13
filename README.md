@@ -28,5 +28,20 @@
 9a. Write an OpenMP program  to multiply two matrices A & B and find the resultant matrix C
 9b. Write a CUDA program to print the message “Hello World” and demonstrate threads by varying BLOCK_WIDTH to different sizes.
 ```
-
+To compile and running OpenMP programs:
+```
+gcc -fopenmp a.c
+./a.out
+```
+To compile and running MPI programs:
+```
+mpicc a.c
+mpirun -np 4 ./a.out
+//4 = number of processors
+```
+To compile and running CUDA C programs:
+```
+nvcc a.cu
+./a.out
+```
 Please star this repository if it helped you!
