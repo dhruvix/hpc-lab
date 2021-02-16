@@ -4,16 +4,18 @@
 int main(){
 int n =6,i,j,k,chunk=3;
 int a[n][n], b[n][n], c[n][n];
-#pragma omp parallel default(shared)
-{
 
-#pragma omp for schedule(static, chunk)
 for(i=0;i<n;i++)
 for(j=0;j<n;j++){
 c[i][j] = 0;
 a[i][j] = i;
 b[i][j] = j;
 }
+#pragma omp parallel default(shared)
+{
+
+
+
 
 #pragma omp for schedule(static, chunk)
 for(i=0;i<n;i++){
