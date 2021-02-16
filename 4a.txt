@@ -13,10 +13,6 @@ b[i][j] = j;
 }
 #pragma omp parallel default(shared)
 {
-
-
-
-
 #pragma omp for schedule(static, chunk)
 for(i=0;i<n;i++){
 printf("Thread %d doing row %d\n",omp_get_thread_num(),i);
